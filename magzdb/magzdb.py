@@ -155,7 +155,7 @@ class Magzdb:
             Tuple[str, list]: Tuple of title and editions found from magzdb
         """
         try:
-            docstring = self.request.get("http://magzdb.org/j/" + id).text
+            docstring = self.request.get("https://magzdb.org/j/" + id).text
             title = re.search(self.REGEX_TITLE, docstring).group("title")
             editions = re.findall(self.REGEX_EDITION, docstring)
 
