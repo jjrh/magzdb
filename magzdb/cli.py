@@ -5,6 +5,7 @@ import sys
 
 from loguru import logger
 
+from magzdb.search import search
 from magzdb.magzdb import Magzdb
 from magzdb.version import __version__
 
@@ -25,13 +26,19 @@ def main():
         version=__version__,
     )
 
-    parser.add_argument(
+    required_group = parser.add_mutually_exclusive_group(required=True)
+
+    required_group.add_argument(
         "-i",
         "--id",
         help="ID of the Magazine to Download. eg. http://magzdb.org/j/<ID>.",
         metavar="MAGAZINE_ID",
-        required=True,
+        required=False,
         type=str,
+    )
+
+    required_group.add_argument(
+        "-s", "--search", help="Search for a string", type=str,
     )
 
     parser.add_argument(
@@ -76,6 +83,11 @@ def main():
     )
 
     args = parser.parse_args()
+
+    if args.search:
+        print("search: '%s'" % (args.search))
+        search(args.search)
+        return 0
 
     if args.downloader == "self":
         logger.warning("Use of external downloader like wget or aria2 is recommended")
